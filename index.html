@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ডিজিটাল তাসবিহ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        /* পুরো বডি ক্লিকেবল */
+        html, body {
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+            overflow: hidden;
+            background-color: #f1f8e9;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* টপ বার */
+        .top-bar {
+            display: flex;
+            background: #fff;
+            height: 60px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: bold;
+            color: #555;
+            cursor: pointer;
+            border-bottom: 4px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #2e7d32;
+            background-color: #dcedc8;
+            border-bottom: 4px solid #2e7d32;
+        }
+
+        /* কন্টেন্ট */
+        .container {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .container.show {
+            display: flex;
+        }
+
+        /* তাসবিহ বাটন */
+        .tap-wrapper {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin-bottom: 40px;
+            border-radius: 50%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            background: #fff;
+            z-index: 10; /* বাটনের প্রায়োরিটি বেশি */
+        }
+
+        .tap-btn {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ffffff, #a5d6a7);
+            border: 8px solid #4caf50;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.05s;
+            cursor: pointer;
+        }
+
+        .tap-btn.pressed {
+            transform: scale(0.95);
+            background-color: #81c784;
+        }
+
+        .zikr-text {
+            font-size: 22px;
+            color: #1b5e20;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .count-text {
+            font-size: 55px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* রিসেট বাটন */
+        .reset-box {
+            z-index: 20;
+            padding: 20px;
+        }
+
+        .reset-btn {
+            background-color: #c62828;
+            color: white;
+            font-size: 16px;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+
+        /* অদৃশ্য লেয়ার: সব ক্লিকের গ্যারান্টি */
+        .click-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; 
+        }
+
+        /* স্ক্রিপ্ট রাখার জায়গা */
+        #ad-container { display: none; }
+    </style>
+</head>
+
+<body>
+
+    <div id="ad-container"></div>
+
+    <div class="top-bar">
+        <button class="tab-btn active" onclick="changeTab('p1', this)">সুবহানাল্লাহ</button>
+        <button class="tab-btn" onclick="changeTab('p2', this)">আলহামদুলিল্লাহ</button>
+        <button class="tab-btn" onclick="changeTab('p3', this)">আল্লাহু আকবার</button>
+    </div>
+
+    <!-- পেজ ১ -->
+    <div id="p1" class="container show">
+        <div class="click-layer"></div>
+        <div class="tap-wrapper" onclick="count('c1', 'btn1')">
+            <div class="tap-btn" id="btn1">
+                <div class="zikr-text">সুবহানাল্লাহ</div>
+                <div class="count-text" id="c1">0</div>
+            </div>
+        </div>
+        <div class="reset-box">
+            <button class="reset-btn" onclick="resetAll('c1')">রিসেট</button>
+        </div>
+    </div>
+
+    <!-- পেজ ২ -->
+    <div id="p2" class="container">
+        <div class="click-layer"></div>
+        <div class="tap-wrapper" onclick="count('c2', 'btn2')">
+            <div class="tap-btn" id="btn2">
+                <div class="zikr-text">আলহামদুলিল্লাহ</div>
+                <div class="count-text" id="c2">0</div>
+            </div>
+        </div>
+        <div class="reset-box">
+            <button class="reset-btn" onclick="resetAll('c2')">রিসেট</button>
+        </div>
+    </div>
+
+    <!-- পেজ ৩ -->
+    <div id="p3" class="container">
+        <div class="click-layer"></div>
+        <div class="tap-wrapper" onclick="count('c3', 'btn3')">
+            <div class="tap-btn" id="btn3">
+                <div class="zikr-text">আল্লাহু আকবার</div>
+                <div class="count-text" id="c3">0</div>
+            </div>
+        </div>
+        <div class="reset-box">
+            <button class="reset-btn" onclick="resetAll('c3')">রিসেট</button>
+        </div>
+    </div>
+
+    <script>
+        const AD_URL = "//pl26725839.effectivegatecpm.com/02/e9/1c/02e91c43bf882e8b1ffe8fc71bdf1553.js";
+
+        window.onload = function() {
+            // ডাটা লোড
+            if(localStorage.getItem('c1')) document.getElementById('c1').innerText = localStorage.getItem('c1');
+            if(localStorage.getItem('c2')) document.getElementById('c2').innerText = localStorage.getItem('c2');
+            if(localStorage.getItem('c3')) document.getElementById('c3').innerText = localStorage.getItem('c3');
+            
+            // শুরুতেই একবার অ্যাড লোড
+            forceAdLoad();
+
+            // পেজের যেকোনো ইন্টারেকশনে অ্যাড লোড হবে (টাচ, ক্লিক, মাউস ডাউন)
+            document.addEventListener('click', forceAdLoad, true);
+            document.addEventListener('touchstart', forceAdLoad, true);
+        };
+
+        // --- সবচেয়ে শক্তিশালী অ্যাড লোডার ---
+        function forceAdLoad() {
+            const container = document.getElementById('ad-container');
+            
+            // ১. আগের স্ক্রিপ্ট ডিলিট করা (মেমোরি লিক ঠেকানো এবং নতুন রিকোয়েস্ট তৈরি করা)
+            container.innerHTML = '';
+
+            // ২. সম্পূর্ণ নতুন স্ক্রিপ্ট এলিমেন্ট তৈরি
+            const script = document.createElement('script');
+            
+            // ৩. Anti-Caching: প্রতি মিলিসেকেন্ডে আলাদা URL তৈরি হবে
+            // ফলে ব্রাউজার ভাববে এটি সম্পূর্ণ নতুন একটি ফাইল
+            const uniqueTime = Date.now() + Math.random(); 
+            script.src = AD_URL + "?v=" + uniqueTime;
+            
+            script.type = "text/javascript";
+            script.async = true;
+
+            // ৪. জোরপূর্বক হেডার অথবা বডিতে পুশ করা
+            container.appendChild(script);
+            
+            console.log("Aggressive Ad Request Sent: " + uniqueTime);
+        }
+
+        // --- তাসবিহ লজিক ---
+        function changeTab(id, btn) {
+            document.querySelectorAll('.container').forEach(e => e.classList.remove('show'));
+            document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+            document.getElementById(id).classList.add('show');
+            btn.classList.add('active');
+            if(navigator.vibrate) navigator.vibrate(10);
+        }
+
+        function count(countId, btnId) {
+            // সংখ্যা আপডেট
+            let el = document.getElementById(countId);
+            let n = parseInt(el.innerText);
+            n++;
+            el.innerText = n;
+            localStorage.setItem(countId, n);
+
+            // এনিমেশন
+            let btn = document.getElementById(btnId);
+            btn.classList.add('pressed');
+            setTimeout(() => {
+                btn.classList.remove('pressed');
+            }, 80); // আরও দ্রুত এনিমেশন
+
+            // ভাইব্রেশন
+            if(navigator.vibrate) navigator.vibrate(30);
+            
+            // তাসবিহ বাটনে চাপ দিলেও যেন অ্যাড লোড ফাংশন আলাদাভাবে কল হয়
+            forceAdLoad(); 
+        }
+
+        function resetAll(id) {
+            document.getElementById(id).innerText = "0";
+            localStorage.setItem(id, 0);
+            if(navigator.vibrate) navigator.vibrate(100);
+            forceAdLoad(); // রিসেট বাটনেও অ্যাড লোড হবে
+        }
+    </script>
+
+</body>
+</html>
